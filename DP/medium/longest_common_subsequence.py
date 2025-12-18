@@ -1,0 +1,55 @@
+"""
+1143. Longest Common Subsequence (Medium)
+Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
+
+A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+
+For example, "ace" is a subsequence of "abcde".
+A common subsequence of two strings is a subsequence that is common to both strings.
+
+Example 1:
+Input: text1 = "abcde", text2 = "ace" 
+Output: 3  
+Explanation: The longest common subsequence is "ace" and its length is 3.
+
+Example 2:
+Input: text1 = "abc", text2 = "abc"
+Output: 3
+Explanation: The longest common subsequence is "abc" and its length is 3.
+
+Example 3:
+Input: text1 = "abc", text2 = "def"
+Output: 0
+Explanation: There is no such common subsequence, so the result is 0.
+"""
+
+from functools import cache
+
+
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        m, n = len(text1), len(text2)
+        
+        @cache
+        def longest(i, j):
+            """
+            Returns the length of the longest common subsequence starting from indices i in text1 and j in text2.
+
+            Parameters:
+            i (int): Current index in text1.
+            j (int): Current index in text2.
+
+            Returns:
+            int: Length of the longest common subsequence from (i, j) onwards.
+            """
+            if m == i or n == j:
+                return 0
+            if text1[i] == text2[j]:
+                return 1 + longest(i+1, j+1)
+            else:
+                return max(longest(i, j+1), longest(i+1, j))
+        
+        return longest(0,0)
+    
+print(Solution().longestCommonSubsequence(text1 = "abcde", text2 = "ace" ))
+print(Solution().longestCommonSubsequence(text1 = "abc", text2 = "def"))
